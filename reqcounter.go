@@ -32,7 +32,7 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		fmt.Fprintf(w, "%d\n", stats.Counter[r.URL.Query().Get("id")])
+		fmt.Fprintln(w, stats.Counter[r.URL.Query().Get("id")])
 		return
 	}
 	var test Test
