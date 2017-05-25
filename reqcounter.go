@@ -32,7 +32,8 @@ func main() {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		fmt.Fprintln(w, stats.Counter[r.URL.Query().Get("id")])
+		id := limitLength(r.URL.Query().Get("id"))
+		fmt.Fprintln(w, stats.Counter[id])
 		return
 	}
 	var test Test
@@ -40,8 +41,16 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	id := limitLength(test.ID)
 	stats.Lock()
-	stats.Counter[test.ID]++
+	stats.Counter[id]++
 	stats.Unlock()
 	w.WriteHeader(http.StatusAccepted)
+}
+
+func limitLength(s string) string {
+	if len(s) > 40 {
+		return s[:40]
+	}
+	return s
 }
