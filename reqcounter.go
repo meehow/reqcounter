@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 	"sync"
 )
 
@@ -21,7 +22,11 @@ var stats = Stats{Counter: make(map[string]uint64)}
 
 func main() {
 	http.HandleFunc("/", handler)
-	http.ListenAndServe("127.0.0.1:3001", nil)
+	addr := ":" + os.Getenv("PORT")
+	if addr == ":" {
+		addr = "127.0.0.1:3001"
+	}
+	http.ListenAndServe(addr, nil)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
