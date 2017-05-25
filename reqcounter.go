@@ -10,7 +10,6 @@ import (
 
 type Test struct {
 	ID string
-	// Counter uint64
 }
 
 type Stats struct {
@@ -38,7 +37,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 	var test Test
 	if err := json.NewDecoder(r.Body).Decode(&test); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, "JSON decoder failed: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 	id := limitLength(test.ID)
