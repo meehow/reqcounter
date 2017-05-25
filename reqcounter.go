@@ -26,18 +26,13 @@ func main() {
 	if addr == ":" {
 		addr = "127.0.0.1:3001"
 	}
+	fmt.Println("Listening on", addr)
 	http.ListenAndServe(addr, nil)
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
-		counter, ok := stats.Counter[r.URL.Query().Get("id")]
-		if !ok {
-			w.WriteHeader(http.StatusNotFound)
-			fmt.Fprintln(w, "ID not found")
-			return
-		}
-		fmt.Fprintf(w, "%d\n", counter)
+		fmt.Fprintf(w, "%d\n", stats.Counter[r.URL.Query().Get("id")])
 		return
 	}
 	var test Test
